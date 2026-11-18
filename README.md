@@ -50,4 +50,4 @@ The character is a real-time 3D model (three.js via React Three Fiber), not a fl
 
 ## File map
 
-See the project tree: `app/` (pages and routes), `components/` (UI), `lib/` (Supabase clients, types, helpers), `public/` (logo and fallback poster), `supabase/schema.sql` (database).
+See the project tree: `app/` (pages and routes), `components/` (UI), `lib/` (Supabase clients, types, helpers), `public/` (logo and fallback poster), `supabase/schema.sql` 
