@@ -84,7 +84,7 @@ export default function VoxelCharacter({ className = "" }: { className?: string 
       ref={wrapRef}
       role="img"
       aria-label="3D voxel character waving hello"
-      className={`relative aspect-square shrink-0 ${className}`}
+      className={`relative w-full max-w-[44rem] ${className}`}
     >
       {webgl === "yes" && (
         <div className={`h-full w-full transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}>

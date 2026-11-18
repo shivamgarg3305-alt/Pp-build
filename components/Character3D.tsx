@@ -213,6 +213,30 @@ const headLocal = (x: number, y: number, z: number): Vec3 => [
 ];
 
 /* ------------------------------------------------------------------ */
+/* Camera: look straight ahead at mid-body and fit height + width      */
+/* ------------------------------------------------------------------ */
+const CAM_Y = 4.62;
+
+function CameraRig() {
+  const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
+  const size = useThree((s) => s.size);
+  const invalidate = useThree((s) => s.invalidate);
+
+  useEffect(() => {
+    const aspect = size.width / Math.max(size.height, 1);
+    const tanHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const distForHeight = 4.8 / tanHalf; // shows ~9.6 world units top to bottom
+    const distForWidth = 3.9 / (tanHalf * aspect); // shows ~7.8 world units side to side
+    camera.position.set(0, CAM_Y, Math.max(distForHeight, distForWidth));
+    camera.lookAt(0, CAM_Y, 0);
+    camera.updateProjectionMatrix();
+    invalidate();
+  }, [camera, size.width, size.height, invalidate]);
+
+  return null;
+}
+
+/* ------------------------------------------------------------------ */
 /* Scene                                                               */
 /* ------------------------------------------------------------------ */
 function Scene({ pointer, reduced }: { pointer: MutableRefObject<PointerState>; reduced: boolean }) {
@@ -341,6 +365,7 @@ function Scene({ pointer, reduced }: { pointer: MutableRefObject<PointerState>; 
 
   return (
     <>
+      <CameraRig />
       <StudioEnvironment />
       <hemisphereLight args={["#ffffff", "#1a1a1a", 0.35]} />
       <directionalLight
@@ -409,7 +434,7 @@ export default function Character3D({
       shadows="soft"
       frameloop={reduced ? "demand" : active ? "always" : "never"}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 4.62, 26], fov: 21, near: 5, far: 70 }}
+      camera={{ position: [0, CAM_Y, 26], rotation: [0, 0, 0], fov: 21, near: 5, far: 70 }}
       onCreated={() => onReady()}
       style={{ background: "transparent" }}
     >
